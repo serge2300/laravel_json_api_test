@@ -23,13 +23,13 @@ Route::group(['prefix' => 'v' . env('APP_VERSION')], function () {
         Route::post('/search', 'SearchController@index');
         // Friends group
         Route::group(['prefix' => 'friend'], function () {
-            Route::post('/all', 'FriendController@all');
-            Route::post('/accept', 'FriendController@accept');
-            Route::post('/decline', 'FriendController@decline');
-            Route::post('/inbox', 'FriendController@inbox');
-            Route::post('/outbox', 'FriendController@outbox');
-            Route::post('/add', 'FriendController@add');
-            Route::post('/remove', 'FriendController@remove');
+            Route::post('/all', 'Friend\AllController@index');
+            Route::post('/accept', 'Friend\AcceptController@index');
+            Route::post('/decline', 'Friend\DeclineController@index');
+            Route::post('/inbox', 'Friend\InboxController@index');
+            Route::post('/outbox', 'Friend\OutboxController@index');
+            Route::post('/add', 'Friend\AddController@index');
+            Route::post('/remove', 'Friend\RemoveController@index');
         });
     });
     // Routes available for all users
