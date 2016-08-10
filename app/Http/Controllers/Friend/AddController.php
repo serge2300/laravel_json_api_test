@@ -18,11 +18,6 @@ class AddController extends FriendController
      */
     public function index(Request $request)
     {
-        // Validate fields
-        if (($validation = $this->validateFields($request)) !== true) {
-            return $validation;
-        }
-
         // Find existing friend request or create a new one
         FriendRequest::firstOrCreate([
             'from_user_id' => $this->user->id,

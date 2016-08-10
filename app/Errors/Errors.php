@@ -15,16 +15,35 @@ class Errors
      * @var array List of validation errors
      */
     private $validationErrors = [
-        'The username field is required.'   => 'USERNAME_REQUIRED',
-        'The password field is required.'   => 'PASSWORD_REQUIRED',
-        'The user id field is required.'    => 'USER_ID_REQUIRED',
-        'The query field is required.'      => 'QUERY_REQUIRED',
-        'The username must be a string.'    => 'BAD_USERNAME',
-        'The selected username is invalid.' => 'BAD_USERNAME',
-        'The password must be a string.'    => 'BAD_PASSWORD',
-        'The user id must be an integer.'   => 'BAD_USER_ID',
-        'The selected user id is invalid.'  => 'BAD_USER_ID',
+        'username' => [
+            'validation.required' => 'USERNAME_REQUIRED',
+            'validation.string'   => 'BAD_USERNAME',
+            'validation.exists'   => 'BAD_USERNAME',
+        ],
+        'password' => [
+            'validation.required' => 'PASSWORD_REQUIRED',
+            'validation.string'   => 'BAD_PASSWORD',
+        ],
+        'user_id' => [
+            'validation.required' => 'USER_ID_REQUIRED',
+            'validation.integer'  => 'BAD_USER_ID',
+            'validation.exists'   => 'BAD_USER_ID',
+        ],
+        'query' => [
+            'validation.required' => 'QUERY_REQUIRED',
+        ],
     ];
+
+    /**
+     * Set error message
+     *
+     * @param $rule
+     * @param $error
+     */
+    public function setMessage($rule, $error)
+    {
+        $this->messages[] = $this->validationErrors[$rule][$error[0]];
+    }
 
     /**
      * Set error messages
@@ -47,33 +66,19 @@ class Errors
     }
 
     /**
-     * Set messages for validation errors
-     *
-     * @param MessageBag $messages
-     *
-     * @return $this
-     */
-    public function validation(MessageBag $messages)
-    {
-        foreach ($messages->all() as $message) {
-            if ($this->validationErrors[$message]) {
-                $this->messages[] = $this->validationErrors[$message];
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Get formatted error response
      *
-     * @param array $messages Set error messages
+     * @param string|array $messages Set error messages
      *
      * @return array
      */
-    public function get(array $messages = [])
+    public function get($messages = null)
     {
-        $this->messages += $messages;
+        if (is_array($messages)) {
+            $this->messages = array_merge($this->messages, $messages);
+        } elseif (is_string($messages)) {
+            $this->messages[] = $messages;
+        }
 
         return ['err' => $this->getMessages()];
     }

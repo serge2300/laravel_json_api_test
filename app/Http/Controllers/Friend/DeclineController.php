@@ -19,19 +19,11 @@ class DeclineController extends FriendController
      */
     public function index(Request $request)
     {
-        // Validate fields
-        if (($validation = $this->validateFields($request)) !== true) {
-            return $validation;
-        }
-
         // Find a friend request. Return an error if not found
         try {
-            $friendRequest = FriendRequest::where([
-                'from_user_id' => $request->json('user_id'),
-                'to_user_id'   => $this->user->id,
-            ])->firstOrFail();
+            $friendRequest = (new \App\Dao\Request())->findRequest($request->json('user_id'), $this->user->id);
         } catch (\Exception $e) {
-            return Response::json(Errors::get(['REQUEST_NOT_FOUND']));
+            return Response::json(Errors::get('REQUEST_NOT_FOUND'));
         }
 
         $friendRequest->delete();

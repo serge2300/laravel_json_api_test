@@ -19,19 +19,11 @@ class RemoveController extends FriendController
      */
     public function index(Request $request)
     {
-        // Validate fields
-        if (($validation = $this->validateFields($request)) !== true) {
-            return $validation;
-        }
-
-        // Find a friend request. Return an error if not found
+        // Find a friend. Return an error if not found
         try {
-            $friend = Friend::where([
-                'user_id'   => $this->user->id,
-                'friend_id' => $request->json('user_id'),
-            ])->firstOrFail();
+            $friend = (new \App\Dao\Friend())->findFriend($this->user->id, $request->json('user_id'));
         } catch (\Exception $e) {
-            return Response::json(Errors::get(['FRIEND_NOT_FOUND']));
+            return Response::json(Errors::get('FRIEND_NOT_FOUND'));
         }
 
         $friend->delete();

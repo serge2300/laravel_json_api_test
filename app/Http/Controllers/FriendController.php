@@ -13,13 +13,6 @@ class FriendController extends Controller
     protected $user;
 
     /**
-     * @var array Validation rules for request fields
-     */
-    protected $validationRules = [
-        'user_id' => 'required|integer|exists:users,id',
-    ];
-
-    /**
      * FriendController constructor.
      */
     public function __construct()

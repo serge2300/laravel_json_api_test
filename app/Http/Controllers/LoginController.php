@@ -11,14 +11,6 @@ use Errors;
 class LoginController extends Controller
 {
     /**
-     * @var array Validation rules for request fields
-     */
-    protected $validationRules = [
-        'username' => 'required|string|exists:users',
-        'password' => 'required|string'
-    ];
-
-    /**
      * User authentication
      *
      * @param Request $request
@@ -27,11 +19,6 @@ class LoginController extends Controller
      */
     public function index(Request $request)
     {
-        // Validate fields
-        if (($validation = $this->validateFields($request)) !== true) {
-            return $validation;
-        }
-
         // Check if a user is authenticated
         if (!Auth::check()) {
             // Attempt to authenticate a user
@@ -43,7 +30,7 @@ class LoginController extends Controller
                 return Response::json(['token' => Auth::user()->getRememberToken()]);
             }
         } else {
-            return Response::json(Errors::get(['ALREADY_LOGGED_IN']));
+            return Response::json(Errors::get('ALREADY_LOGGED_IN'));
         }
     }
 }
