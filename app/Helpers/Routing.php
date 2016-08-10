@@ -19,7 +19,7 @@ class Routing
     {
         return call_user_func_array(['Route', $method], ["/$route", [
             'middleware' => 'request:' . join('|', $rules),
-            'uses' => ucfirst($route).'Controller@index',
+            'uses'       => 'IndexController@handle',
         ]]);
     }
 }

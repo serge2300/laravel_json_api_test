@@ -1,42 +1,40 @@
 <?php
 
-namespace App\Http\Controllers\Friend;
+namespace App\Services\Friend;
 
-use App\Http\Controllers\FriendController;
+use App\Services\ServiceInterface;
 use Illuminate\Http\Request;
 use App\Friend;
-use App\Request as FriendRequest;
-use Response;
 use Errors;
 use DB;
 
-class AcceptController extends FriendController
+class AcceptService implements ServiceInterface
 {
     /**
      * Accept friend request
      *
      * @param Request $request
      *
-     * @return Response
+     * @return array
      */
-    public function index(Request $request)
+    public static function index(Request $request)
     {
         // Find a friend request. Return an error if not found
         try {
-            $friendRequest = (new \App\Dao\Request())->findRequest($request->json('user_id'), $this->user->id);
+            $friendRequest = (new \App\Dao\Request())->findRequest($request->json('user_id'), $request->user()['id']);
         } catch (\Exception $e) {
-            return Response::json(Errors::get('REQUEST_NOT_FOUND'));
+            return Errors::get('REQUEST_NOT_FOUND');
         }
 
         // Perform a transaction: add a new friend and delete a friend request
         DB::transaction(function () use ($request, $friendRequest) {
             Friend::firstOrCreate([
-                'user_id'   => $this->user->id,
+                'user_id'   => $request->user()['id'],
                 'friend_id' => $request->json('user_id'),
             ]);
             $friendRequest->delete();
         });
 
-        return Response::make(null);
+        return null;
     }
 }

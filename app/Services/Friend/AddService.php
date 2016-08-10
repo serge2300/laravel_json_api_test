@@ -1,29 +1,28 @@
 <?php
 
-namespace App\Http\Controllers\Friend;
+namespace App\Services\Friend;
 
-use App\Http\Controllers\FriendController;
+use App\Services\ServiceInterface;
 use Illuminate\Http\Request;
 use App\Request as FriendRequest;
-use Response;
 
-class AddController extends FriendController
+class AddService implements ServiceInterface
 {
     /**
      * Make a friend request
      *
      * @param Request $request
      *
-     * @return Response
+     * @return array
      */
-    public function index(Request $request)
+    public static function index(Request $request)
     {
         // Find existing friend request or create a new one
         FriendRequest::firstOrCreate([
-            'from_user_id' => $this->user->id,
+            'from_user_id' => $request->user()['id'],
             'to_user_id'   => $request->json('user_id'),
         ]);
 
-        return Response::make(null);
+        return null;
     }
 }

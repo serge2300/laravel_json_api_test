@@ -11,25 +11,20 @@
 |
 */
 
-Route::any('/', function () {
-    return '';
-});
-
 // A group for authorized users
 Route::group(['middleware' => 'auth'], function () {
     Routing::add('post', 'profile', ['user_id']);
-//        Route::post('/profile', ['middleware' => 'request:user_id', 'uses' => 'ProfileController@index']);
-    Route::post('/search', ['middleware' => 'request:query', 'uses' => 'SearchController@index']);
+    Routing::add('post', 'search', ['query']);
     // Friends group
     Route::group(['prefix' => 'friend'], function () {
-        Route::post('/all', 'Friend\AllController@index');
-        Route::post('/accept', ['middleware' => 'request:user_id', 'uses' => 'Friend\AcceptController@index']);
-        Route::post('/decline', ['middleware' => 'request:user_id', 'uses' => 'Friend\DeclineController@index']);
-        Route::post('/inbox', 'Friend\InboxController@index');
-        Route::post('/outbox', 'Friend\OutboxController@index');
-        Route::post('/add', ['middleware' => 'request:user_id', 'uses' => 'Friend\AddController@index']);
-        Route::post('/remove', ['middleware' => 'request:user_id', 'uses' => 'Friend\RemoveController@index']);
+        Routing::add('post', 'all');
+        Routing::add('post', 'accept', ['user_id']);
+        Routing::add('post', 'decline', ['user_id']);
+        Routing::add('post', 'inbox');
+        Routing::add('post', 'outbox');
+        Routing::add('post', 'add', ['user_id']);
+        Routing::add('post', 'remove', ['user_id']);
     });
 });
 // Routes available for all users
-Route::post('/login', ['middleware' => 'request:username|password', 'uses' => 'LoginController@index']);
+Routing::add('post', 'login', ['username', 'password']);

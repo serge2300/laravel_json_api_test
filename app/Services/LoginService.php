@@ -1,23 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use Auth;
-use Response;
 use Errors;
 
-class LoginController extends Controller
+class LoginService implements ServiceInterface
 {
     /**
      * User authentication
      *
      * @param Request $request
      *
-     * @return Response
+     * @return array
      */
-    public function index(Request $request)
+    public static function index(Request $request)
     {
         // Check if a user is authenticated
         if (!Auth::check()) {
@@ -26,11 +24,11 @@ class LoginController extends Controller
                 'username' => $request->json('username'),
                 'password' => $request->json('password')
             ], true)) {
-                // Return response with user token
-                return Response::json(['token' => Auth::user()->getRememberToken()]);
+                // Return user token
+                return ['token' => Auth::user()->getRememberToken()];
             }
         } else {
-            return Response::json(Errors::get('ALREADY_LOGGED_IN'));
+            return Errors::get('ALREADY_LOGGED_IN');
         }
     }
 }

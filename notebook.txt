@@ -1,0 +1,5 @@
+$z = FriendRequestModel::where('to_user_id', $to_user_id)
+            ->select('users.*')
+            ->from('users')
+            ->join('requests', 'users.id', '=', 'requests.from_user_id')
+            ->get();
