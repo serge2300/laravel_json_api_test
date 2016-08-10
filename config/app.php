@@ -205,6 +205,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Input' => Illuminate\Support\Facades\Input::class,
         'Errors' => App\Facades\Errors::class,
+        'Routing' => App\Facades\Routing::class,
 
     ],
 

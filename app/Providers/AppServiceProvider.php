@@ -24,7 +24,10 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('errors', function () {
-            return new \App\Errors\Errors();
+            return new \App\Helpers\Errors();
+        });
+        $this->app->singleton('routing', function () {
+            return new \App\Helpers\Routing();
         });
     }
 }
